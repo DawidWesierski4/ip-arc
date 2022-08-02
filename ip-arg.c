@@ -18,6 +18,15 @@ int ipArg_stringToDec(char* source, unsigned int size)
     return output;
 }
 
+unsigned int ipArg_returnTheSubnetId(unsigned int ip, unsigned int mask)
+{
+    return (ip & mask);
+}
+
+unsigned int ipArg_returnTheBroadcastIp(unsigned int ip, unsigned int mask)
+{
+    return (ip | ~mask);
+}
 
 int ipArg_checkIfCorrectFormat(const char* source)
 {
@@ -25,9 +34,11 @@ int ipArg_checkIfCorrectFormat(const char* source)
     int i,j;
     int countSuccesfulOctets = 0;
 
-    if(srcLen < 12 || srcLen > 21)
+    if(srcLen < 9 || srcLen > 18)
     {
+        printf("source[i] = %c j = %d \n",source[i],j);
         return 0;
+
     }
 
     i = 0;
@@ -60,13 +71,7 @@ int ipArg_checkIfCorrectFormat(const char* source)
             continue;
         }
 
-        if(j > 3) //4 decimal octet case
-        {
-
-            return 0;
-        }
-
-        if(source[i] == '\\')
+        if(source[i] == '/')
         {
             if(countSuccesfulOctets != 3)
             {
@@ -93,6 +98,11 @@ int ipArg_checkIfCorrectFormat(const char* source)
 
             return 1;
         }
+
+        if(j > 3) //4 decimal octet case
+        {
+            return 0;
+        }
         i++;
         j++;
     }
@@ -103,7 +113,7 @@ int ipArg_ipConversion(const char* source, unsigned int* ip, unsigned int *mask)
 {
     unsigned int maskPrototype = 0xFFFFFFFF;
     int i,j,k;
-    char octet;
+    unsigned char octet;
     char aux[3];
     int sourceLen = strlen(source);
     const char *tmp ;
@@ -112,12 +122,11 @@ int ipArg_ipConversion(const char* source, unsigned int* ip, unsigned int *mask)
     k = 0;
     for(j = 0; source[j] != '\0'; j++)
     {
-        if(source[j] == '.' || source[j] == '\\')
+        if(source[j] == '.' || source[j] == '/')
         {
-            for(int asd = 0;asd < 3;asd++) aux[asd] = 0;
-            strncpy(aux,source+k,j-k);
             octet = ipArg_stringToDec(strncpy(aux,source+k,j-k),j-k);
-            memset((char*)(ip)+3-i, octet, 1);
+            *ip = *ip << 8;
+            *ip = *ip | octet;
             i++;
             k = j+1;
         }
@@ -139,14 +148,10 @@ int ipArg_ipConversion(const char* source, unsigned int* ip, unsigned int *mask)
 
 void ipArg_printAdress(unsigned int id)
 {
-    for(int i=0;i<4;i++)
+    unsigned int mask = 0xFF;
+    for(int i=24;i>=0;i-=8)
     {
-        printf("%d \n",(char)&id+i);
+        printf("%u.",(id >> i) & mask);
     }
-}
-
-
-unsigned int ipArg_retNetworkId(unsigned int mask, unsigned int id)
-{
-    return id = id ^ mask;
+    printf("\n");
 }
