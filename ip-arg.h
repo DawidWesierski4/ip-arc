@@ -1,12 +1,27 @@
-int ipArg_ipConversion(const char* source, unsigned int* ip,
-                       unsigned int *mask);
+#ifndef _IPARG_
+#define _IPARG_
 
-int ipArg_stringToDec(char* source, unsigned int size);
+#include <stdint.h>
 
-int ipArg_checkIfCorrectFormat(const char* source);
+#define IPARG_IPV4_PRINTFORMAT "%u.%u.%u.%u"
+#define IPARG_IPV4(x) (x >> 24),(x >> 16) & 0xFF,\
+                      (x >> 8) & 0xFF,(x) & 0xFF
 
-void ipArg_printAdress(unsigned int id);
+uint32_t ipArg_returnTheSubnetIp(uint32_t ip, uint32_t mask);
 
-unsigned int ipArg_returnTheSubnetId(unsigned int ip, unsigned int mask);
+uint32_t ipArg_returnTheBroadcastIp(uint32_t ip, uint32_t mask);
 
-unsigned int ipArg_returnTheBroadcastIp(unsigned int ip, unsigned int mask);
+uint32_t ipArg_nmbOfHosts(uint32_t mask);
+
+int ipArg_ipConversion(const char *source, uint32_t *ip,
+                       uint32_t *mask);
+
+int ipArg_stringToDec(char* source, uint32_t size);
+
+int ipArg_checkIfCorrectFormat(const char *source);
+
+void ipArg_printAdress(uint32_t id);
+
+#endif /* Header guard IPARG */
+
+

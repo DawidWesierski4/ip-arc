@@ -4,41 +4,50 @@
 #include <stdbool.h>
 #include "ip-arg.h"
 
-int ipArg_stringToDec(char* source, unsigned int size)
+int ipArg_stringToDec(char *source, uint32_t size)
 {
     int i=0;
     int output = 0;
     int PowOfTen = 1;
-    for(i=size-1; i>=0; i--)
+    for(i=size-1; i>0; i--)
     {
         output = output + PowOfTen * (source[i] - '0');
         PowOfTen *= 10;
     }
-
-    return output;
+    if(source[i] == '-')
+    {
+        return output * -1;
+    }
+    else
+    {
+        return output + PowOfTen * (source[i] - '0');
+    }
 }
 
-unsigned int ipArg_returnTheSubnetId(unsigned int ip, unsigned int mask)
+uint32_t ipArg_returnTheSubnetIp(uint32_t ip, uint32_t mask)
 {
     return (ip & mask);
 }
 
-unsigned int ipArg_returnTheBroadcastIp(unsigned int ip, unsigned int mask)
+uint32_t ipArg_returnTheBroadcastIp(uint32_t ip, uint32_t mask)
 {
     return (ip | ~mask);
 }
 
-int ipArg_checkIfCorrectFormat(const char* source)
+uint32_t ipArg_nmbOfHosts(uint32_t mask)
 {
-    int srcLen = strlen(source);
-    int i,j;
-    int countSuccesfulOctets = 0;
+    return ~mask -2;
+}
+
+int ipArg_checkIfCorrectFormat(const char *source)
+{
+    uint32_t srcLen = strlen(source);
+    uint32_t i,j;
+    uint32_t countSuccesfulOctets = 0;
 
     if(srcLen < 9 || srcLen > 18)
     {
-        printf("source[i] = %c j = %d \n",source[i],j);
         return 0;
-
     }
 
     i = 0;
@@ -75,7 +84,6 @@ int ipArg_checkIfCorrectFormat(const char* source)
         {
             if(countSuccesfulOctets != 3)
             {
-
                 return 0;
             }
             j = 1;
@@ -84,14 +92,16 @@ int ipArg_checkIfCorrectFormat(const char* source)
             {
                 if(source[i+j] < '0' || source[i+j] > '9')
                 {
-
                     return 0;
                 }
                 j++;
             }
 
-            if(j == 1 || j > 3 || j == 3 &&
-               (source[i+1] > '3' || source[i+1] == '3' && source[i+2] > '2'))
+            /*this if says that if the value is greater than
+             32 return 0 */
+            if(j == 1 || j > 3 || 
+              (j == 3 && (source[i+1] > '3' || 
+              ( (source[i+1] == '3') && (source[i+2] > '2') ))))
             {
                 return 0;
             }
@@ -109,14 +119,12 @@ int ipArg_checkIfCorrectFormat(const char* source)
     return 0;
 }
 
-int ipArg_ipConversion(const char* source, unsigned int* ip, unsigned int *mask)
+int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
 {
-    unsigned int maskPrototype = 0xFFFFFFFF;
+    uint32_t maskPrototype = 0xFFFFFFFF;
     int i,j,k;
     unsigned char octet;
     char aux[3];
-    int sourceLen = strlen(source);
-    const char *tmp ;
 
     i = 0;
     k = 0;
@@ -124,11 +132,11 @@ int ipArg_ipConversion(const char* source, unsigned int* ip, unsigned int *mask)
     {
         if(source[j] == '.' || source[j] == '/')
         {
-            octet = ipArg_stringToDec(strncpy(aux,source+k,j-k),j-k);
+            octet = ipArg_stringToDec(strncpy(aux, source+k, j-k), j-k);
             *ip = *ip << 8;
             *ip = *ip | octet;
             i++;
-            k = j+1;
+            k = j + 1;
         }
 
         if(source[j+1] == '\0')
@@ -146,12 +154,13 @@ int ipArg_ipConversion(const char* source, unsigned int* ip, unsigned int *mask)
     return 1;
 }
 
-void ipArg_printAdress(unsigned int id)
+void ipArg_printAdress(uint32_t id)
 {
-    unsigned int mask = 0xFF;
-    for(int i=24;i>=0;i-=8)
+    int i;
+    uint32_t mask = 0xFF;
+    for(i = 24; i > 0; i -= 8)
     {
         printf("%u.",(id >> i) & mask);
     }
-    printf("\n");
+    printf("%u \n",(id >> i) & mask);
 }

@@ -1,13 +1,12 @@
-#include "ip-arg.h"
-#include <stdio.h>
-#include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include "ip-arg.h"
 
 int main(int argc, char *argv[])
 {
-    int i;
-    unsigned int ip;
-    int mask;
+    uint32_t i;
+    uint32_t ip;
+    uint32_t mask;
 
     for(i=1;i<argc;i++)
     {
@@ -23,12 +22,14 @@ int main(int argc, char *argv[])
             printf("idk smthing failed \n");
             return 0;
         }
-        ipArg_printAdress(ip);
-        ipArg_printAdress(mask);
-        ip = ipArg_returnTheSubnetId(ip,mask);
-        ipArg_printAdress(ip);
+        printf("IP = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
+        printf("Mask = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
+        ip = ipArg_returnTheSubnetIp(ip,mask);
+        printf("Subnet Mask = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
         ip = ipArg_returnTheBroadcastIp(ip,mask);
-        ipArg_printAdress(ip);
+        printf("Broadcast IP = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
+        ip = ipArg_nmbOfHosts(mask);
+        printf("Number of hosts = %d\n",ip);
     }
     return 0;
 }
