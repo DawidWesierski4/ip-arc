@@ -36,7 +36,7 @@ uint32_t ipArg_returnTheBroadcastIp(uint32_t ip, uint32_t mask)
 
 uint32_t ipArg_nmbOfHosts(uint32_t mask)
 {
-    return ~mask -2;
+    return ~mask -1;
 }
 
 int ipArg_checkIfCorrectFormat(const char *source)
