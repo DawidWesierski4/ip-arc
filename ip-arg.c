@@ -4,26 +4,6 @@
 #include <stdbool.h>
 #include "ip-arg.h"
 
-int ipArg_stringToDec(char *source, uint32_t size)
-{
-    int i=0;
-    int output = 0;
-    int PowOfTen = 1;
-    for(i=size-1; i>0; i--)
-    {
-        output = output + PowOfTen * (source[i] - '0');
-        PowOfTen *= 10;
-    }
-    if(source[i] == '-')
-    {
-        return output * -1;
-    }
-    else
-    {
-        return output + PowOfTen * (source[i] - '0');
-    }
-}
-
 uint32_t ipArg_returnTheSubnetIp(uint32_t ip, uint32_t mask)
 {
     return (ip & mask);
@@ -63,7 +43,9 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
         {
             octet = atoi(strncpy(aux, source+k, j-k));
 
-            if(octet > 255)
+            if(octet > 255 ||
+               octetWatches > 4 ||
+               (octetWatches == 4 && source[j] != '/'))
             {
                 return 2;
             }
@@ -76,7 +58,9 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
 
         if(source[j+1] == '\0')
         {
-            octet = ipArg_stringToDec(strncpy(aux,source+k,j-k+1),j-k+1);
+            aux[2] = '\0';
+
+            octet = atoi(strncpy(aux, source+k, j-k+1));
             //printf("octet = %d %s  ",octet,strncpy(aux,source+k,j-k+1));
             octet = 32 - octet;
             *mask = maskPrototype;

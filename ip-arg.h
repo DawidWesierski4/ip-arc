@@ -16,8 +16,6 @@ uint32_t ipArg_nmbOfHosts(uint32_t mask);
 int ipArg_ipConversion(const char *source, uint32_t *ip,
                        uint32_t *mask);
 
-int ipArg_stringToDec(char* source, uint32_t size);
-
 int ipArg_checkIfCorrectFormat(const char *source);
 
 #endif /* Header guard IPARG */
