@@ -12,24 +12,24 @@ int main(int argc, char *argv[])
     {
         ip = 0;
         mask = INT32_MAX;
-        if(!ipArg_checkIfCorrectFormat(argv[i]))
+        switch(ipArg_ipConversion(argv[i], &ip, &mask))
         {
-            printf("IP is incorrect exiting now\n");
-            return 0;
+            case 1:
+                printf("Ip consist erroneous sign \n");
+                return 1;
+            case 2:
+                printf("Ip octet value exceeds 255 ");
+                return 1;
+
         }
-        if(!ipArg_ipConversion(argv[i],&ip,&mask))
-        {
-            printf("idk smthing failed \n");
-            return 0;
-        }
-        printf("IP = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
-        printf("Mask = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
+        printf("IP = "IPARG_IPV4_PRINTFORMAT"\n", IPARG_IPV4(ip));
+        printf("Mask = " IPARG_IPV4_PRINTFORMAT "\n", IPARG_IPV4(mask));
         ip = ipArg_returnTheSubnetIp(ip,mask);
         printf("Subnet Mask = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
-        ip = ipArg_returnTheBroadcastIp(ip,mask);
-        printf("Broadcast IP = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
-        ip = ipArg_nmbOfHosts(mask);
-        printf("Number of hosts = %d\n \n",ip);
+        ip = ipArg_returnTheBroadcastIp( ip, mask );
+        printf("Broadcast IP = " IPARG_IPV4_PRINTFORMAT "\n", IPARG_IPV4(ip));
+        ip = ipArg_nmbOfHosts( mask );
+        printf("Number of hosts = %d\n \n", ip);
     }
     return 0;
 }
