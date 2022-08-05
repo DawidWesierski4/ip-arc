@@ -16,7 +16,15 @@ uint32_t ipArg_returnTheBroadcastIp(uint32_t ip, uint32_t mask)
 
 uint32_t ipArg_nmbOfHosts(uint32_t mask)
 {
-    return ~mask - 1;
+    //guard againt 32 /31 bit mask case where this case would return -1
+    if(~mask > 0)
+    {
+        return ~mask - 1;
+    }
+    else 
+    {
+        return 0;
+    }
 }
 
 int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
@@ -39,8 +47,15 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
             return 1;
         }
 
+        //terminating eraly in case of oversized octet 
+        if(j-k > 3)
+        {
+            return 2;
+        }
+
         if(source[j] == '.' || source[j] == '/')
         {
+            printf(" log 1 --> j - k ==  %d \n", j-k);
             octet = atoi(strncpy(aux, source+k, j-k));
 
             if(octet > 255 ||
@@ -58,10 +73,16 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
 
         if(source[j+1] == '\0')
         {
+            if( ((j-k+1) > 2) || ((j-k+1) < 1) )
+                return 3;
+
             aux[2] = '\0';
+            aux[1] = 0;
 
             octet = atoi(strncpy(aux, source+k, j-k+1));
-            //printf("octet = %d %s  ",octet,strncpy(aux,source+k,j-k+1));
+
+            if(octet > 32 || octet < 1)
+                return 3;
             octet = 32 - octet;
             *mask = maskPrototype;
             while(octet--)

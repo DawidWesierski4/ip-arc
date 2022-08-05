@@ -18,7 +18,10 @@ int main(int argc, char *argv[])
                 printf("Ip consist erroneous sign \n");
                 return 1;
             case 2:
-                printf("Ip octet value exceeds 255 ");
+                printf("Your Ip exceeds the 32 bit format\n");
+                return 1;
+            case 3:
+                printf("Mask is incorrect\n");
                 return 1;
 
         }
