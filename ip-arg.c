@@ -16,8 +16,8 @@ uint32_t ipArg_returnTheBroadcastIp(uint32_t ip, uint32_t mask)
 
 uint32_t ipArg_nmbOfHosts(uint32_t mask)
 {
-    //guard againt 32 /31 bit mask case where this case would return -1
-    if(~mask > 0)
+    //guard against 32   bit mask case where this case would return -1
+    if(~mask)
     {
         return ~mask - 1;
     }
@@ -39,7 +39,7 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
     k = 0;
     for(j = 0; source[j] != '\0'; j++)
     {
-        /*checking if the sign is corrent)*/
+        //checking if the sign is correct
         if( !(source[j] == '.' ||
               source[j] == '/' ||
               (source[j] >= '0' && source[j] <= '9') ) )
@@ -59,7 +59,8 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
 
             if(octet > 255 ||
                octetWatches > 4 ||
-               (octetWatches == 4 && source[j] != '/'))
+               (octetWatches == 4 && source[j] != '/') ||
+               (octetWatches !=3 && source[j] == '/') )
             {
                 return 2;
             }
