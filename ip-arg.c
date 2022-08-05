@@ -55,7 +55,6 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
 
         if(source[j] == '.' || source[j] == '/')
         {
-            printf(" log 1 --> j - k ==  %d \n", j-k);
             octet = atoi(strncpy(aux, source+k, j-k));
 
             if(octet > 255 ||
