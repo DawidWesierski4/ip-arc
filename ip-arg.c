@@ -47,7 +47,7 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
             return 1;
         }
 
-        //terminating eraly in case of oversized octet 
+        //terminating early in case of oversized octet 
         if(j-k > 3)
         {
             return 2;
