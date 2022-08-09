@@ -87,7 +87,6 @@ int ipArg_ipConversion(const char *source, uint32_t *ip, uint32_t *mask)
             octet = 32 - octet;
             *mask = maskPrototype;
             *mask <<= octet;
-
         }
     }
     return 0;
