@@ -18,7 +18,7 @@ uint32_t ipArg_returnTheSubnetIp(uint32_t ip, uint32_t mask);
 
 uint32_t ipArg_returnTheBroadcastIp(uint32_t ip, uint32_t mask);
 
-uint32_t ipArg_nmbOfHosts(uint32_t mask);
+uint32_t ipArg_returnNmbOfHosts(uint32_t mask);
 
 int ipArg_ipConversion(const char *source, uint32_t *ip,
                        uint32_t *mask);

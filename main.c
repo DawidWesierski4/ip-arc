@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
         printf("Subnet Mask = "IPARG_IPV4_PRINTFORMAT"\n",IPARG_IPV4(ip));
         ip = ipArg_returnTheBroadcastIp( ip, mask );
         printf("Broadcast IP = " IPARG_IPV4_PRINTFORMAT "\n", IPARG_IPV4(ip));
-        ip = ipArg_nmbOfHosts( mask );
+        ip = ipArg_returnNmbOfHosts( mask );
         printf("Number of hosts = %d\n \n", ip);
     }
     return 0;
